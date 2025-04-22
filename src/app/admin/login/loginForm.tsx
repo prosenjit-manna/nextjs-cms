@@ -62,7 +62,10 @@ export default function LoginForm() {
                     });
             })}
 */}
-            <form action={formAction}>
+            <form onSubmit={form.onSubmit((values) => {
+                console.log('Form values:', values);
+                formAction(values);
+            })}>
                 <Paper withBorder shadow="md" p={30} mt={30} radius="md">
                     <TextInput {...form.getInputProps('email')} name='email' label="Email" placeholder="you@mantine.dev" required />
                     <PasswordInput {...form.getInputProps('password')} name='password' label="Password" placeholder="Your password" required mt="md" />

@@ -4,10 +4,10 @@ import User, { IUser } from '@/admin/user/User.model';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export async function loginAction(prev: any, formdata: FormData) {
+export async function loginAction(prev: any, formdata: { email: string, password: string }) {
   await connectToMongoDB(); // Ensure the database is connected
     console.log('Login action called', formdata);
-  const { email, password } = { email: formdata.get('email'), password: formdata.get('password') };
+  const { email, password } = formdata;
   console.log('Login action called with values:', email, password);
   const user: IUser | null = await User.findOne({ email });
 
