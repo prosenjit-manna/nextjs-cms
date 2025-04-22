@@ -1,30 +1,23 @@
-// app/api/login/route.ts
+'use server'
 import { connectToMongoDB } from '@/admin/libs/dbConnect';
 import User, { IUser } from '@/admin/user/User.model';
 import { cookies } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
+import { redirect } from 'next/navigation';
 
-export async function POST(req: NextRequest) {
+export async function loginAction(prev: any, formdata: FormData) {
   await connectToMongoDB(); // Ensure the database is connected
-  const { email, password } = await req.json();
-
+    console.log('Login action called', formdata);
+  const { email, password } = { email: formdata.get('email'), password: formdata.get('password') };
+  console.log('Login action called with values:', email, password);
   const user: IUser | null = await User.findOne({ email });
 
+
   if (!user) {
-    return NextResponse.json(
-      { success: false, message: 'User not found' },
-      { status: 404 }
-    );
+    return {
+      success: false,
+      message: 'User not found',
+    };
   }
-
-  if (user.password === password) {
-    return NextResponse.json(
-      { success: true, message: 'Login successful' },
-      { status: 200 }
-    );
-  }
-  // If the password is incorrect, return an error response
-
     // For demo purposes, accept any login
     const token = 'fake-auth-token-' + Math.random().toString(36).substring(2);
   
@@ -40,8 +33,6 @@ export async function POST(req: NextRequest) {
       sameSite: 'strict',
     });
     
-  return NextResponse.json(
-    { success: false, message: 'Invalid credentials' },
-    { status: 401 }
-  );
+    redirect('/admin/profile');
+ 
 }

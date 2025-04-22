@@ -14,9 +14,10 @@ import {
 } from '@mantine/core';
 import classes from './admin-login.module.css';
 import { useForm } from '@mantine/form';
-
+import { loginAction } from './action';
+import { useActionState } from "react";
 export default function LoginForm() {
-
+    const [state, formAction] = useActionState(loginAction, { success: false, message: '' });
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
@@ -37,7 +38,8 @@ export default function LoginForm() {
             </Title>
 
 
-            <form onSubmit={form.onSubmit((values) => {
+{/* 
+    onSubmit={form.onSubmit((values) => {
                 console.log('Form values:', values);
                 // Perform login logic here
                 // For example, send a request to your API
@@ -58,10 +60,12 @@ export default function LoginForm() {
                     .catch((error) => {
                         console.error('Error:', error);
                     });
-            })}>
+            })}
+*/}
+            <form action={formAction}>
                 <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-                    <TextInput {...form.getInputProps('email')} label="Email" placeholder="you@mantine.dev" required />
-                    <PasswordInput {...form.getInputProps('password')} label="Password" placeholder="Your password" required mt="md" />
+                    <TextInput {...form.getInputProps('email')} name='email' label="Email" placeholder="you@mantine.dev" required />
+                    <PasswordInput {...form.getInputProps('password')} name='password' label="Password" placeholder="Your password" required mt="md" />
                     <Button fullWidth mt="xl" type="submit">
                         Sign in
                     </Button>
