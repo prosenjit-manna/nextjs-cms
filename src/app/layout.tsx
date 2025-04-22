@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { createTheme, mantineHtmlProps, MantineProvider } from '@mantine/core';
 import Head from 'next/head'
 import { ColorSchemeScript } from '@mantine/core';
+import { connectToMongoDB } from "../admin/libs/dbConnect";
 
 import '@mantine/core/styles.css';
 import "./globals.css";
@@ -32,6 +33,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  connectToMongoDB();
+
   return (
     <html lang="en" {...mantineHtmlProps}>
       <Head>
